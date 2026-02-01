@@ -1,3 +1,8 @@
+---
+name: morpheus-fashion-design
+description: Generate professional fashion and product advertising images using ComfyDeploy's Morpheus workflow. Use when creating commercial photography, fashion campaigns, product shots with models, or brand advertising visuals.
+---
+
 # Morpheus Fashion Design
 
 Generate professional fashion/product advertising images using ComfyDeploy's Morpheus Fashion Design workflow.
