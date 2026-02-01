@@ -127,3 +127,13 @@ Set these environment variables:
 - `GEMINI_API_KEY` - Your Google Gemini API key
 
 Or pass via CLI arguments.
+
+## Troubleshooting
+
+### Imagen negra o vacía
+Si la imagen generada sale completamente negra o vacía, es el **filtro de moderación de Google/Gemini**. Causas comunes:
+- Se pidió una persona famosa o celebridad
+- Contenido considerado sensible por el modelo
+- La combinación de prompt + imágenes fue rechazada por políticas de contenido
+
+**Solución:** Modificar el prompt para evitar referencias a personas reales/famosas, o cambiar elementos que puedan activar el filtro.
