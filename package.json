@@ -1,0 +1,38 @@
+{
+  "name": "morpheus-fashion-design",
+  "version": "1.0.0",
+  "description": "AI skill for generating professional fashion/product advertising images using ComfyDeploy's Morpheus workflow",
+  "main": "index.js",
+  "bin": {
+    "morpheus-fashion-design": "./bin/cli.js"
+  },
+  "files": [
+    "SKILL.md",
+    "scripts/",
+    "bin/",
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "clawdbot",
+    "clawdbot-skill",
+    "agentskills",
+    "claude",
+    "ai",
+    "fashion",
+    "product-photography",
+    "comfydeploy",
+    "image-generation",
+    "morfeo"
+  ],
+  "author": "Paul de Lavallaz <paul@morfeoacademy.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PauldeLavallaz/morpheus-fashion-design"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}
