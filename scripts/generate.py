@@ -27,7 +27,7 @@ sys.stderr.reconfigure(line_buffering=True)
 
 DEPLOYMENT_ID = "79324c61-6bd4-4218-a438-73f1b28c24a7"
 API_BASE = "https://api.comfydeploy.com/api"
-GEMINI_API_KEY = "AIzaSyALsNu1lZ6F9NFvRe1Hgb59QGZWpVRttcs"
+GEMINI_API_KEY = ""
 
 
 def get_api_key(provided_key: str | None) -> str | None:
