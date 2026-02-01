@@ -115,8 +115,10 @@ The system follows this priority:
 2. Garments (product fidelity) > 
 3. Fit > Pose > Style > Location > Branding
 
-## API Key
+## API Keys
 
-Set `COMFY_DEPLOY_API_KEY` environment variable or pass via `--api-key`.
+Set these environment variables:
+- `COMFY_DEPLOY_API_KEY` - Your ComfyDeploy API key
+- `GEMINI_API_KEY` - Your Google Gemini API key
 
-The Gemini API key is already configured: `AIzaSyALsNu1lZ6F9NFvRe1Hgb59QGZWpVRttcs`
+Or pass via CLI arguments.
