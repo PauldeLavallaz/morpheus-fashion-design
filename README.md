@@ -4,25 +4,21 @@ AI skill for generating professional fashion and product advertising images usin
 
 ## Installation
 
-### For Clawdbot users
+### Using skills.sh (recommended for AI agents)
 
 ```bash
-clawdhub install morpheus-fashion-design
+npx skills add PauldeLavallaz/morpheus-fashion-design
 ```
 
-### For Claude Code / other AI agents
+### Using npm
 
 ```bash
-# Install globally
-npm install -g @morfeo/morpheus-fashion-design
-
-# Or run directly with npx
-npx @morfeo/morpheus-fashion-design --help
+npm install -g morpheus-fashion-design
 ```
 
-### Manual installation
+### Manual
 
-Copy the `SKILL.md` and `scripts/` folder to your agent's skills directory.
+Copy the `morpheus-fashion-design/` folder to your agent's skills directory.
 
 ## Requirements
 
@@ -32,18 +28,6 @@ Copy the `SKILL.md` and `scripts/` folder to your agent's skills directory.
 
 ## Usage
 
-### As a CLI
-
-```bash
-morpheus-fashion-design \
-  --product "path/to/product.jpg" \
-  --model "path/to/model-face.jpg" \
-  --brief "Campaign description..." \
-  --target "Target audience..." \
-  --aspect-ratio "4:5" \
-  --output "output.png"
-```
-
 ### As an AI Skill
 
 The skill is automatically loaded by compatible AI agents. Just describe what you want:
@@ -51,6 +35,18 @@ The skill is automatically loaded by compatible AI agents. Just describe what yo
 > "Generate a fashion ad for this jacket with a model in an urban setting"
 
 The agent will use the skill's workflow to create professional advertising images.
+
+### As a CLI
+
+```bash
+npx morpheus-fashion-design \
+  --product "path/to/product.jpg" \
+  --model "path/to/model-face.jpg" \
+  --brief "Campaign description..." \
+  --target "Target audience..." \
+  --aspect-ratio "4:5" \
+  --output "output.png"
+```
 
 ## Features
 
@@ -61,19 +57,13 @@ The agent will use the skill's workflow to create professional advertising image
 - Configurable camera, lighting, and environment settings
 - Brand logo integration
 
-## API Keys Setup
+## Skill Structure
 
-Set these environment variables:
-
-```bash
-export COMFY_DEPLOY_API_KEY="your-key"
-export GEMINI_API_KEY="your-key"
 ```
-
-Or pass them via the CLI:
-
-```bash
-morpheus-fashion-design --api-key "your-key" ...
+morpheus-fashion-design/
+├── SKILL.md          # Instructions for AI agents
+└── scripts/
+    └── generate.py   # Generation script
 ```
 
 ## License
