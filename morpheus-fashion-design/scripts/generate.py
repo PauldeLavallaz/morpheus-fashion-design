@@ -25,9 +25,9 @@ sys.stdout.reconfigure(line_buffering=True)
 sys.stderr.reconfigure(line_buffering=True)
 
 
-DEPLOYMENT_ID = "79324c61-6bd4-4218-a438-73f1b28c24a7"
+DEPLOYMENT_ID = "1e16994d-da67-4f30-9ade-250f964b2abc"
 API_BASE = "https://api.comfydeploy.com/api"
-GEMINI_API_KEY = ""
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyALsNu1lZ6F9NFvRe1Hgb59QGZWpVRttcs")
 
 
 def get_api_key(provided_key: str | None) -> str | None:
@@ -99,7 +99,7 @@ def queue_run(client: httpx.Client, api_key: str, inputs: dict) -> str:
     return run_id
 
 
-def poll_run(client: httpx.Client, api_key: str, run_id: str, timeout: int = 300) -> dict:
+def poll_run(client: httpx.Client, api_key: str, run_id: str, timeout: int = 600) -> dict:
     """Poll for run completion."""
     start_time = time.time()
     
@@ -177,6 +177,36 @@ def main():
     parser.add_argument("--seed", type=int, default=-1, help="Random seed (-1 for random)")
     
     args = parser.parse_args()
+    
+    # Warn about AUTO values - they produce boring results!
+    auto_packs = []
+    if args.style_pack == "auto":
+        auto_packs.append("--style-pack")
+    if args.camera_pack == "auto":
+        auto_packs.append("--camera-pack")
+    if args.lens_pack == "auto":
+        auto_packs.append("--lens-pack")
+    if args.lighting_pack == "auto":
+        auto_packs.append("--lighting-pack")
+    if args.pose_pack == "auto":
+        auto_packs.append("--pose-pack")
+    if args.film_pack == "auto":
+        auto_packs.append("--film-pack")
+    if args.color_pack == "auto":
+        auto_packs.append("--color-pack")
+    if args.environment_pack.upper() == "AUTO":
+        auto_packs.append("--environment-pack")
+    if args.time_weather_pack == "auto":
+        auto_packs.append("--time-weather-pack")
+    
+    if auto_packs:
+        print("\n" + "="*60, file=sys.stderr)
+        print("⚠️  WARNING: AUTO VALUES DETECTED!", file=sys.stderr)
+        print("="*60, file=sys.stderr)
+        print(f"The following packs are set to 'auto': {', '.join(auto_packs)}", file=sys.stderr)
+        print("AUTO = empty values = neutral, boring images!", file=sys.stderr)
+        print("Always specify creative values aligned with the brief.", file=sys.stderr)
+        print("="*60 + "\n", file=sys.stderr)
     
     # Get API key
     api_key = get_api_key(args.api_key)

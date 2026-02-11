@@ -1,11 +1,52 @@
 ---
 name: morpheus-fashion-design
-description: Generate professional fashion and product advertising images using ComfyDeploy's Morpheus workflow. Use when creating commercial photography, fashion campaigns, product shots with models, or brand advertising visuals.
+description: Generate professional fashion/product advertising images using ComfyDeploy's Morpheus Fashion Design workflow. Use when the user asks to create fashion ads, product campaigns, commercial photography with models, or branded content. Supports model face consistency, product integration, and professional camera/lighting simulation.
 ---
 
 # Morpheus Fashion Design
 
 Generate professional fashion/product advertising images using ComfyDeploy's Morpheus Fashion Design workflow.
+
+## ⚠️ CRITICAL RULE: NEVER USE AUTO VALUES
+
+**Configuration packs MUST NEVER be left on `auto` or `AUTO`.**
+
+`auto` = empty values = neutral, boring images with no creative direction.
+
+The pack options listed below are **suggestions/ideas**, but you can send **custom values** that better fit the brief. The goal is to select the **best possible configuration** to represent the image needed for the brief.
+
+### Pack Selection Guidelines
+
+For EVERY generation, thoughtfully select values based on the creative brief:
+
+| Pack | How to Choose |
+|------|---------------|
+| `style_pack` | Match brand personality: luxury→`premium_restraint`, sports→`cinematic_realism`, street→`street_authentic` |
+| `camera_pack` | What camera would a real photographer use? Sports→`sony_a1`, editorial→`hasselblad_x2d`, street→`leica_m6` |
+| `lens_pack` | Portrait compression? Anamorphic? Wide? Match the shot type and mood |
+| `lighting_pack` | What's described in the brief? Golden hour? Studio? Natural window? Choose accordingly |
+| `pose_discipline_pack` | What's the model doing? Sport action→`sport_in_motion`, commercial→`commercial_front_facing` |
+| `film_texture_pack` | Warm editorial→`kodak_portra_400`, cinematic→`kodak_vision3_500t`, clean digital→`digital_clean_no_emulation` |
+| `environment_pack` | Match brief location: beach→`beach_minimal`, urban→`urban_glass_steel`, nature→provide location_ref image |
+| `color_science_pack` | Warm tones? Cool? Cinematic contrast? Select based on mood |
+| `time_weather_pack` | When does the scene happen? Golden hour? Midday? Overcast? |
+
+### Example: Oakley Snowboarding Campaign
+```python
+style_pack = "cinematic_realism"  # NOT auto - sports action needs energy
+camera_pack = "sony_a1"            # Fast sports camera
+lens_pack = "wide_distortion_controlled"  # Capture the action
+lighting_pack = "golden_hour_backlit"     # Alpine dramatic lighting
+pose_discipline_pack = "sport_in_motion"  # Rider in action
+time_weather_pack = "golden_hour_clear"   # Mountain conditions
+```
+
+### Custom Values
+If none of the preset options fit, you can write your own value as a descriptive string:
+```python
+lighting_pack = "harsh alpine midday sun reflecting off fresh powder"
+environment_pack = "snowpark with metal rails and pristine packed snow"
+```
 
 ## Overview
 
@@ -18,7 +59,7 @@ Morpheus Fashion Design is a comprehensive AI workflow for creating high-quality
 ## API Details
 
 **Endpoint:** `https://api.comfydeploy.com/api/run/deployment/queue`
-**Deployment ID:** `79324c61-6bd4-4218-a438-73f1b28c24a7`
+**Deployment ID:** `1e16994d-da67-4f30-9ade-250f964b2abc` (production)
 
 ## Required Inputs
 
@@ -26,6 +67,80 @@ Morpheus Fashion Design is a comprehensive AI workflow for creating high-quality
 1. **product** - Product image URL (the item being advertised)
 2. **model** - Model face reference (frontal face photo)
 3. **logo** - Brand logo (optional, use placeholder if not needed)
+
+## 🎭 Model Catalog
+
+A curated catalog of 114 AI-generated model references is available for use when no specific model is provided.
+
+### Repository
+**GitHub:** `https://github.com/PauldeLavallaz/model_management`
+
+### ⚠️ PRIORITY: User-provided model ALWAYS wins
+If the user attaches/provides a model image → use that image directly. The catalog is ONLY for when no model is specified.
+
+### Setup (First Time Installation)
+```bash
+# Clone the catalog to your workspace
+git clone https://github.com/PauldeLavallaz/model_management.git models-catalog
+```
+
+### Update Catalog
+```bash
+cd models-catalog && git pull
+```
+
+### Local Path (if already cloned)
+`~/clawd/models-catalog/catalog/images/`
+
+### Catalog Structure
+```
+models-catalog/
+└── catalog/
+    ├── catalog.json      # Full metadata for all models
+    └── images/           # Model reference photos (model_01.jpg - model_114.jpg)
+```
+
+### Using the Catalog
+
+**Priority order for model selection:**
+1. **User provides model image** → Use that image directly
+2. **User describes desired model** → Search catalog and select best match
+3. **No specification** → Select appropriate model based on campaign brief
+
+### Searching the Catalog
+```bash
+# List all models with basic info
+cat models-catalog/catalog/catalog.json | jq '[.talents[] | {id, name, gender, ethnicity, tags: .tags[0:2]}]'
+
+# Find models by ethnicity
+cat models-catalog/catalog/catalog.json | jq '[.talents[] | select(.ethnicity == "hispanic") | {id, name, description}]'
+
+# Find models by tag
+cat models-catalog/catalog/catalog.json | jq '[.talents[] | select(.tags[] == "commercial") | {id, name, ethnicity}]'
+
+# Find models by gender
+cat models-catalog/catalog/catalog.json | jq '[.talents[] | select(.gender == "male") | {id, name, ethnicity}]'
+```
+
+### Model Attributes
+Each model entry includes:
+- `id`: Unique identifier (model_01, model_02, etc.)
+- `name`: Model name
+- `gender`: female, male, non-binary
+- `ethnicity`: african, asian, caucasian, hispanic, mixed, etc.
+- `age_group`: young_adult, adult, mature
+- `tags`: editorial, commercial, beauty, lifestyle, avant-garde, etc.
+- `description`: Detailed description of look and best uses
+- `image_path`: Path to reference image
+
+### Example: Selecting a Model
+```bash
+# For an Argentine campo/gaucho campaign, find hispanic females with commercial tags:
+cat models-catalog/catalog/catalog.json | jq '[.talents[] | select(.ethnicity == "hispanic" and .gender == "female" and (.tags[] == "commercial" or .tags[] == "lifestyle")) | {id, name, description}]'
+
+# Then use the selected model:
+--model "models-catalog/catalog/images/model_08.jpg"
+```
 
 ### Creative Brief
 1. **brief** - Detailed campaign description including:
@@ -120,13 +235,11 @@ The system follows this priority:
 2. Garments (product fidelity) > 
 3. Fit > Pose > Style > Location > Branding
 
-## API Keys
+## API Key
 
-Set these environment variables:
-- `COMFY_DEPLOY_API_KEY` - Your ComfyDeploy API key
-- `GEMINI_API_KEY` - Your Google Gemini API key
+**DO NOT pass the API key via parameter.** Leave it empty.
 
-Or pass via CLI arguments.
+The API key is already configured in ComfyDeploy. Passing `--api-key` will cause authentication errors.
 
 ## Troubleshooting
 
